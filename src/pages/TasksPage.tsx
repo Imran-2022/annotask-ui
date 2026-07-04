@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTasks } from '@/context/TaskContext';
 import { DateSelector } from '@/components/DateSelector';
@@ -92,23 +92,23 @@ export default function TasksPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Task Manager</h1>
-            {user && <p className="text-sm text-gray-600 mt-1">{user.email}</p>}
+            <h1 className="text-3xl font-bold text-slate-900">Task Manager</h1>
+            {user && <p className="text-sm text-slate-500 mt-1">{user.email}</p>}
           </div>
-          <div className="flex gap-3 flex-wrap">
-            <Link
-              to="/annotate"
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium"
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => navigate('/annotate')}
+              className="rounded-2xl bg-violet-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:bg-violet-700"
             >
               Annotate Images
-            </Link>
+            </button>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+              className="rounded-2xl bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/20 transition hover:bg-red-700"
             >
               Logout
             </button>
@@ -118,32 +118,36 @@ export default function TasksPage() {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {error && (
-          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex justify-between items-center">
-            <span>{error}</span>
-            <button onClick={() => setError('')} className="text-red-700 hover:text-red-900">
-              ✕
-            </button>
+          <div className="mb-6 rounded-3xl bg-red-50 border border-red-200 p-4 text-red-700">
+            <div className="flex items-center justify-between gap-4">
+              <span>{error}</span>
+              <button onClick={() => setError('')} className="text-red-700 opacity-80 hover:opacity-100">
+                ✕
+              </button>
+            </div>
           </div>
         )}
 
         <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
 
-        <div className="mb-6">
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <button
             onClick={handleAddTask}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium flex items-center gap-2"
+            className="inline-flex items-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-700"
           >
             + Add Task
           </button>
         </div>
 
-        <Board
-          tasks={tasks}
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          onReorder={handleReorder}
-          isLoading={isLoading}
-        />
+        <div className="mt-6">
+          <Board
+            tasks={tasks}
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+            onReorder={handleReorder}
+            isLoading={isLoading}
+          />
+        </div>
       </main>
 
       <TaskModal

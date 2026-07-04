@@ -33,11 +33,11 @@ export const Column: React.FC<ColumnProps> = ({
   };
 
   return (
-    <div className={`flex flex-col rounded-lg overflow-hidden shadow-md ${columnColors[status]}`}>
-      <div className={`${headerColors[status]} p-4 font-bold text-gray-900`}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg">{title}</h2>
-          <span className="bg-white text-gray-900 rounded-full px-3 py-1 text-sm font-semibold">
+    <div className={`flex flex-col rounded-[32px] overflow-hidden shadow-sm ${columnColors[status]}`}>
+      <div className={`${headerColors[status]} p-5 font-semibold text-slate-900 border-b border-slate-200`}>
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-base md:text-lg">{title}</h2>
+          <span className="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-900 shadow-sm">
             {tasks.length}
           </span>
         </div>
@@ -48,13 +48,21 @@ export const Column: React.FC<ColumnProps> = ({
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className={`flex-1 p-4 min-h-96 ${
-              snapshot.isDraggingOver ? 'bg-opacity-50 bg-blue-100' : ''
+            className={`flex-1 p-5 min-h-[28rem] ${
+              snapshot.isDraggingOver ? 'bg-slate-100' : ''
             }`}
           >
             {tasks.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
-                No tasks for today
+              <div className="flex h-full flex-col items-center justify-center gap-4 text-center text-slate-500">
+                <div className="rounded-3xl border border-slate-200 bg-white/80 p-8 shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zM9 7V5a2 2 0 012-2h2a2 2 0 012 2v2m0 10v-6a2 2 0 012-2h2a2 2 0 012 2v6a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-800">No tasks for today</p>
+                  <p className="text-sm text-slate-500">Add a new task to get started</p>
+                </div>
               </div>
             ) : (
               tasks.map((task, index) => (
@@ -65,7 +73,7 @@ export const Column: React.FC<ColumnProps> = ({
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       style={provided.draggableProps.style}
-                      className="mb-3"
+                      className="mb-4"
                     >
                       <TaskCard
                         task={task}

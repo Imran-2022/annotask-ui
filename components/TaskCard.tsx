@@ -31,23 +31,28 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <div
-      className={`bg-white rounded-lg p-4 shadow cursor-move hover:shadow-lg transition ${
-        statusColors[task.status]
-      } ${isDragging ? 'opacity-50' : ''}`}
+      className={`bg-white rounded-[24px] p-5 shadow-sm transition ${
+        isDragging ? 'opacity-70 shadow-lg' : 'shadow-sm'
+      } ${statusColors[task.status]}`}
     >
-      <div className="flex items-start justify-between mb-3">
-        <h3 className="font-semibold text-gray-900 flex-1 break-words">{task.title}</h3>
-        <div className="flex gap-2 ml-2">
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="min-w-0">
+          <h3 className="text-base font-semibold text-slate-900 break-words">{task.title}</h3>
+          {task.description && (
+            <p className="mt-2 text-sm text-slate-500 break-words">{task.description}</p>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
           <button
             onClick={() => onEdit(task)}
-            className="text-blue-600 hover:text-blue-800 text-sm"
+            className="rounded-full bg-slate-100 p-2 text-slate-600 hover:bg-slate-200 transition"
             title="Edit task"
           >
             ✎
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="text-red-600 hover:text-red-800 text-sm"
+            className="rounded-full bg-slate-100 p-2 text-red-600 hover:bg-red-100 transition"
             title="Delete task"
           >
             ✕
@@ -55,13 +60,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </div>
       </div>
 
-      {task.description && (
-        <p className="text-sm text-gray-600 mb-3 break-words">{task.description}</p>
-      )}
-
-      <div className="flex flex-wrap gap-2 mb-3">
+      <div className="flex flex-wrap gap-2 mb-4">
         <span
-          className={`inline-block px-2 py-1 text-xs font-medium rounded border ${
+          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${
             priorityColors[task.priority]
           }`}
         >
@@ -69,17 +70,17 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </span>
 
         {task.tags_list && task.tags_list.length > 0 && (
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-2">
             {task.tags_list.slice(0, 2).map((tag, idx) => (
               <span
                 key={idx}
-                className="inline-block px-2 py-1 text-xs bg-indigo-100 text-indigo-800 rounded"
+                className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700"
               >
                 {tag}
               </span>
             ))}
             {task.tags_list.length > 2 && (
-              <span className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded">
+              <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                 +{task.tags_list.length - 2}
               </span>
             )}
@@ -87,7 +88,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         )}
       </div>
 
-      <div className="text-xs text-gray-500">
+      <div className="flex items-center gap-2 text-sm text-slate-500">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
         {format(new Date(task.due_date), 'MMM d, yyyy')}
       </div>
     </div>
