@@ -59,6 +59,7 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
   const stageRef = useRef<Konva.Stage>(null);
   const layerRef = useRef<Konva.Layer>(null);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [stageSize, setStageSize] = useState({ width: 800, height: 600 });
   const isPanning = useRef(false);
   const lastPosRef = useRef({ x: 0, y: 0 });
@@ -66,13 +67,18 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
   useEffect(() => {
     if (!imageUrl) {
       setImage(null);
+      setLoadError(null);
       return;
     }
 
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    setLoadError(null);
     img.onload = () => setImage(img);
-    img.onerror = () => console.error('Failed to load image');
+    img.onerror = () => {
+      console.error('Failed to load image', imageUrl);
+      setImage(null);
+      setLoadError('Unable to load the image. Please check your backend media URL or CORS configuration.');
+    };
     img.src = imageUrl;
   }, [imageUrl]);
 
@@ -221,7 +227,14 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
     <div className="relative w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
       {!image && (
         <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm px-6 text-center">
-          Upload images to start annotating. Use draw mode to place polygon points.
+          {loadError ? (
+            <div>
+              <p className="font-semibold text-red-300">{loadError}</p>
+              <p className="mt-2 text-sm text-gray-400">Try reloading or check the backend media URL.</p>
+            </div>
+          ) : (
+            'Upload images to start annotating. Use draw mode to place polygon points.'
+          )}
         </div>
       )}
 

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMedicalAnnotation } from '@/hooks/useMedicalAnnotation';
 import { MedicalAnnotationCanvas } from '@/components/MedicalAnnotationCanvas';
 import { MedicalTopToolbar } from '@/components/MedicalTopToolbar';
-import { BottomToolbar } from '@/components/MedicalBottomToolbar';
+import { BottomToolbar } from '@/components/BottomToolbar';
 import { UploadPanel } from '@/components/MedicalUploadPanel';
 import { AnnotationsSidebar } from '@/components/AnnotationsSidebar';
 
@@ -48,6 +49,8 @@ export default function AnnotatePage(): React.ReactElement {
   const handleStopDrawing = () => {
     annotation.resetDrawing();
   };
+
+  const navigate = useNavigate();
 
   const handleFullscreen = () => {
     const container = document.getElementById('annotation-container');
@@ -120,7 +123,7 @@ export default function AnnotatePage(): React.ReactElement {
         onApplyWindowChange={annotation.setApplyWindow}
         onPrevImage={() => annotation.navigateImage('prev')}
         onNextImage={() => annotation.navigateImage('next')}
-        onBack={() => (window.location.href = '/tasks')}
+        onBack={() => navigate('/tasks')}
         onUpload={handleUpload}
         onDeleteImage={handleDeleteCurrentImage}
         hasImage={!!annotation.currentImage}
