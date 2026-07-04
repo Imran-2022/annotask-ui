@@ -18,10 +18,25 @@ interface RegisterResponse {
 
 const getErrorMessage = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
-    const data = error.response?.data;
-    if (typeof data === 'string') {
-      return data;
+    const response = error.response;
+    const data = response?.data;
+
+    if (!response) {
+      return 'Unable to connect to the server. Please check your network and try again.';
     }
+
+    if (response.status === 404) {
+      return 'Registration service not found. Please refresh the page or contact support.';
+    }
+
+    if (typeof data === 'string') {
+      const trimmed = data.trim();
+      if (trimmed.startsWith('<!doctype html>') || trimmed.startsWith('<html')) {
+        return 'Unexpected response from the server. Please try again later.';
+      }
+      return trimmed || error.message;
+    }
+
     if (data && typeof data === 'object') {
       if ('detail' in data && typeof data.detail === 'string') {
         return data.detail;
@@ -34,9 +49,10 @@ const getErrorMessage = (error: unknown): string => {
         .map((value) => (typeof value === 'string' ? value : Array.isArray(value) ? value.join(' ') : ''))
         .filter(Boolean)
         .join(' ')
-        .trim() || error.message;
+        .trim() || `Request failed with status ${response.status}.`;
     }
-    return error.message;
+
+    return `Request failed with status ${response.status}.`;
   }
   return error instanceof Error ? error.message : String(error);
 };
@@ -44,7 +60,7 @@ const getErrorMessage = (error: unknown): string => {
 export const authService = {
   async login(email: string, password: string): Promise<LoginResponse> {
     try {
-      const response = await apiClient.post<LoginResponse>('/auth/auth/login/', {
+      const response = await apiClient.post<LoginResponse>('/auth/login/', {
         email,
         password,
       });
@@ -61,7 +77,7 @@ export const authService = {
     password2: string
   ): Promise<RegisterResponse> {
     try {
-      const response = await apiClient.post<RegisterResponse>('/auth/auth/register/', {
+      const response = await apiClient.post<RegisterResponse>('/auth/register/', {
         username,
         email,
         password,
@@ -76,11 +92,11 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    await apiClient.post('/auth/auth/logout/');
+    await apiClient.post('/auth/logout/');
   },
 
   async getCurrentUser(): Promise<User> {
-    const response = await apiClient.get<User>('/auth/auth/me/');
+    const response = await apiClient.get<User>('/auth/me/');
     return response.data;
   },
 };
