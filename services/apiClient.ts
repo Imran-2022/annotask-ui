@@ -1,6 +1,8 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const normalizedApiUrl = rawApiUrl.replace(/\/+$|\/api\/+$/i, '/api').replace(/\/api\/$/, '/api');
+const API_URL = normalizedApiUrl.endsWith('/api') ? normalizedApiUrl : `${normalizedApiUrl}/api`;
 
 export const apiClient = axios.create({
   baseURL: API_URL,
