@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMedicalAnnotation } from '@/hooks/useMedicalAnnotation';
 import { MedicalAnnotationCanvas } from '@/components/MedicalAnnotationCanvas';
 import { MedicalTopToolbar } from '@/components/MedicalTopToolbar';
-import { BottomToolbar } from '@/components/BottomToolbar';
+import { BottomToolbar } from '@/components/MedicalBottomToolbar';
 import { UploadPanel } from '@/components/MedicalUploadPanel';
 import { AnnotationsSidebar } from '@/components/AnnotationsSidebar';
 
