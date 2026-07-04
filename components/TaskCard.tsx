@@ -18,22 +18,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   isDragging,
 }) => {
   const priorityColors: Record<string, string> = {
-    high: 'bg-red-100 text-red-800 border-red-300',
-    medium: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    low: 'bg-green-100 text-green-800 border-green-300',
-  };
-
-  const statusColors: Record<string, string> = {
-    todo: 'border-l-4 border-gray-400 bg-gray-50',
-    in_progress: 'border-l-4 border-blue-400 bg-blue-50',
-    done: 'border-l-4 border-green-400 bg-green-50',
+    high: 'bg-rose-100 text-rose-800 border-rose-200',
+    medium: 'bg-amber-100 text-amber-800 border-amber-200',
+    low: 'bg-emerald-100 text-emerald-800 border-emerald-200',
   };
 
   return (
     <div
-      className={`bg-white rounded-[24px] p-5 shadow-sm transition ${
-        isDragging ? 'opacity-70 shadow-lg' : 'shadow-sm'
-      } ${statusColors[task.status]}`}
+      className={`bg-white rounded-[28px] border border-slate-200 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition ${
+        isDragging ? 'opacity-80 shadow-[0_18px_45px_rgba(15,23,42,0.12)]' : ''
+      }`}
     >
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="min-w-0">
@@ -62,7 +56,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
       <div className="flex flex-wrap gap-2 mb-4">
         <span
-          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${
+          className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold ${
             priorityColors[task.priority]
           }`}
         >
@@ -74,13 +68,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             {task.tags_list.slice(0, 2).map((tag, idx) => (
               <span
                 key={idx}
-                className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700"
+                className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-[11px] font-semibold text-violet-700"
               >
                 {tag}
               </span>
             ))}
             {task.tags_list.length > 2 && (
-              <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+              <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-700">
                 +{task.tags_list.length - 2}
               </span>
             )}

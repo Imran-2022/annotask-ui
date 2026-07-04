@@ -21,23 +21,23 @@ export const Column: React.FC<ColumnProps> = ({
   onDeleteTask,
 }) => {
   const columnColors: Record<Task['status'], string> = {
-    todo: 'bg-gray-50',
-    in_progress: 'bg-blue-50',
-    done: 'bg-green-50',
+    todo: 'bg-white',
+    in_progress: 'bg-sky-50',
+    done: 'bg-emerald-50',
   };
 
   const headerColors: Record<Task['status'], string> = {
-    todo: 'bg-gray-200',
-    in_progress: 'bg-blue-200',
-    done: 'bg-green-200',
+    todo: 'bg-slate-100',
+    in_progress: 'bg-sky-100',
+    done: 'bg-emerald-100',
   };
 
   return (
-    <div className={`flex flex-col rounded-[32px] overflow-hidden shadow-sm ${columnColors[status]}`}>
-      <div className={`${headerColors[status]} p-5 font-semibold text-slate-900 border-b border-slate-200`}>
+    <div className={`flex flex-col rounded-[28px] overflow-hidden shadow-[0_20px_40px_rgba(15,23,42,0.08)] ${columnColors[status]}`}>
+      <div className={`${headerColors[status]} p-5 font-semibold text-slate-900 border-b border-slate-200 rounded-t-[28px]`}>
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-base md:text-lg">{title}</h2>
-          <span className="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-900 shadow-sm">
+          <span className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-full bg-white px-3 text-sm font-semibold text-slate-900 shadow-sm">
             {tasks.length}
           </span>
         </div>
