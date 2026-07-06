@@ -47,7 +47,7 @@ export const MedicalTopToolbar: React.FC<TopToolbarProps> = ({
     }
   };
   return (
-    <div className="bg-white px-4 py-4 flex flex-col gap-4 rounded-b-3xl border-b border-slate-200 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+    <div className="bg-slate-950 text-white px-4 py-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3 flex-wrap">
         <button
           onClick={onPrevImage}

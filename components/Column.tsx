@@ -20,12 +20,6 @@ export const Column: React.FC<ColumnProps> = ({
   onEditTask,
   onDeleteTask,
 }) => {
-  const columnColors: Record<Task['status'], string> = {
-    todo: 'bg-white',
-    in_progress: 'bg-white',
-    done: 'bg-white',
-  };
-
   const headerColors: Record<Task['status'], string> = {
     todo: 'bg-indigo-600 text-white',
     in_progress: 'bg-sky-600 text-white',
@@ -33,14 +27,12 @@ export const Column: React.FC<ColumnProps> = ({
   };
 
   return (
-    <div className={`flex flex-col overflow-hidden ${columnColors[status]}`}>
-      <div className={`${headerColors[status]} p-4 font-semibold border-b border-slate-200`}>
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base md:text-lg">{title}</h2>
-          <span className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-full bg-white px-3 text-sm font-semibold text-slate-900">
-            {tasks.length}
+    <div className="flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-[#F8FAFC] shadow-sm">
+      <div className={`${headerColors[status]} flex items-center justify-between gap-3 px-5 py-4 font-semibold rounded-t-3xl`}>
+        <h2 className="text-base md:text-lg">{title}</h2>
+        <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-white">
+            {title} ({tasks.length})
           </span>
-        </div>
       </div>
 
       <Droppable droppableId={status}>
@@ -48,8 +40,8 @@ export const Column: React.FC<ColumnProps> = ({
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className={`flex-1 p-4 min-h-[22rem] ${
-              snapshot.isDraggingOver ? 'bg-slate-50' : ''
+            className={`flex-1 p-4 min-h-[18rem] transition-all ${
+              snapshot.isDraggingOver ? 'bg-slate-100 ring-2 ring-offset-2 ring-fuchsia-300/40' : 'bg-[#F8FAFC]'
             }`}
           >
             {tasks.length === 0 ? (

@@ -12,6 +12,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(defaultDate);
   const [isLoading, setIsLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchTasks = useCallback(async (date: Date) => {
@@ -42,7 +43,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const addTask = useCallback(async (task: Omit<Task, 'id' | 'created_at' | 'updated_at' | 'order'>) => {
-    setIsLoading(true);
+    setActionLoading(true);
     setError(null);
     try {
       const newTask = await taskService.createTask(task);
@@ -51,12 +52,12 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       setError(err instanceof Error ? err.message : 'Failed to create task');
       throw err;
     } finally {
-      setIsLoading(false);
+      setActionLoading(false);
     }
   }, []);
 
   const updateTask = useCallback(async (id: number, task: Partial<Task>) => {
-    setIsLoading(true);
+    setActionLoading(true);
     setError(null);
     try {
       const updatedTask = await taskService.updateTask(id, task);
@@ -65,12 +66,12 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       setError(err instanceof Error ? err.message : 'Failed to update task');
       throw err;
     } finally {
-      setIsLoading(false);
+      setActionLoading(false);
     }
   }, []);
 
   const deleteTask = useCallback(async (id: number) => {
-    setIsLoading(true);
+    setActionLoading(true);
     setError(null);
     try {
       await taskService.deleteTask(id);
@@ -79,7 +80,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       setError(err instanceof Error ? err.message : 'Failed to delete task');
       throw err;
     } finally {
-      setIsLoading(false);
+      setActionLoading(false);
     }
   }, []);
 
@@ -94,7 +95,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const changeTaskStatus = useCallback(async (taskId: number, newStatus: Task['status']) => {
-    setIsLoading(true);
+    setActionLoading(true);
     setError(null);
     try {
       const updatedTask = await taskService.changeTaskStatus(taskId, newStatus);
@@ -103,7 +104,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       setError(err instanceof Error ? err.message : 'Failed to change status');
       throw err;
     } finally {
-      setIsLoading(false);
+      setActionLoading(false);
     }
   }, []);
 
@@ -111,6 +112,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     tasks,
     selectedDate,
     isLoading,
+    actionLoading,
     error,
     fetchTasks,
     fetchTasksByDateRange,

@@ -109,12 +109,12 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
   // Scale to cover the available area (fill width or height) to reduce large empty gaps for banner-like images.
   // This chooses the larger scale so the image fills at least one dimension; it may crop along the other axis.
   const imageScale = image
-    ? Math.min(stageSize.width / image.width, stageSize.height / image.height)
+    ? Math.max(stageSize.width / image.width, stageSize.height / image.height)
     : 1;
   const imageWidth = image ? image.width * imageScale : 0;
   const imageHeight = image ? image.height * imageScale : 0;
-  const offsetX = Math.max((stageSize.width - imageWidth) / 2, 0);
-  const offsetY = Math.max((stageSize.height - imageHeight) / 2, 0);
+  const offsetX = (stageSize.width - imageWidth) / 2;
+  const offsetY = (stageSize.height - imageHeight) / 2;
   const groupScale = imageScale * zoom;
 
   const handleStageMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -230,7 +230,7 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
   const filteredAnnotations = hidePreviousAnnotations ? [] : annotations;
 
   return (
-    <div className="relative w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+    <div className="relative w-full h-full min-h-[32rem] bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
       {!image && (
         <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm px-6 text-center">
           {loadError ? (

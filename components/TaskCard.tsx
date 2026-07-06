@@ -17,42 +17,36 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onDelete,
   isDragging,
 }) => {
-  const priorityColors: Record<string, string> = {
-    high: 'bg-rose-100 text-rose-800 border-rose-200',
-    medium: 'bg-amber-100 text-amber-800 border-amber-200',
-    low: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-  };
-
-  const statusStyles: Record<Task['status'], string> = {
-    todo: 'border-indigo-500 text-slate-900 bg-indigo-50/50',
-    in_progress: 'border-sky-500 text-slate-900 bg-sky-50/50',
-    done: 'border-emerald-500 text-slate-900 bg-emerald-50/50',
+  const priorityStyles: Record<Task['priority'], string> = {
+    high: 'border-rose-500/80 bg-rose-50',
+    medium: 'border-amber-500/80 bg-amber-50',
+    low: 'border-emerald-500/80 bg-emerald-50',
   };
 
   return (
     <div
-      className={`border-l-4 p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${statusStyles[task.status]} ${
+      className={`border-l-4 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${priorityStyles[task.priority]} ${
         isDragging ? 'opacity-80 shadow-md' : ''
-      } rounded-sm`}
+      } rounded-3xl`}
     >
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="min-w-0">
-          <h3 className="text-base font-semibold text-slate-900 break-words">{task.title}</h3>
+          <h3 className="text-lg font-bold text-slate-900 break-words">{task.title}</h3>
           {task.description && (
-            <p className="mt-2 text-sm text-slate-500 break-words">{task.description}</p>
+            <p className="mt-2 text-sm text-slate-600 break-words">{task.description}</p>
           )}
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => onEdit(task)}
-            className="rounded-full bg-slate-100 p-2 text-slate-600 hover:bg-slate-200 transition"
+            className="rounded-full bg-slate-100 p-2 text-slate-600 hover:bg-slate-200 transition shadow-sm"
             title="Edit task"
           >
             ✎
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="rounded-full bg-slate-100 p-2 text-red-600 hover:bg-red-100 transition"
+            className="rounded-full bg-slate-100 p-2 text-rose-600 hover:bg-rose-100 transition shadow-sm"
             title="Delete task"
           >
             ✕
@@ -63,7 +57,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       <div className="flex flex-wrap gap-2 mb-4">
         <span
           className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold ${
-            priorityColors[task.priority]
+            priorityStyles[task.priority]
           }`}
         >
           {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}

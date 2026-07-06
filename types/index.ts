@@ -119,6 +119,7 @@ export interface TaskState {
   tasks: Task[];
   selectedDate: Date;
   isLoading: boolean;
+  actionLoading: boolean;
   error: string | null;
   
   fetchTasks: (date: Date) => Promise<void>;
