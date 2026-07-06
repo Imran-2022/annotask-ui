@@ -23,9 +23,15 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     low: 'bg-emerald-100 text-emerald-800 border-emerald-200',
   };
 
+  const statusStyles: Record<Task['status'], string> = {
+    todo: 'bg-indigo-50 border-indigo-400 text-slate-900',
+    in_progress: 'bg-sky-50 border-sky-400 text-slate-900',
+    done: 'bg-emerald-50 border-emerald-400 text-slate-900',
+  };
+
   return (
     <div
-      className={`bg-white border border-slate-200 border-l-4 border-indigo-500 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+      className={`border-l-4 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${statusStyles[task.status]} ${
         isDragging ? 'opacity-80 shadow-md' : ''
       } rounded-none`}
     >

@@ -21,20 +21,20 @@ export const Column: React.FC<ColumnProps> = ({
   onDeleteTask,
 }) => {
   const columnColors: Record<Task['status'], string> = {
-    todo: 'bg-white',
-    in_progress: 'bg-slate-50',
-    done: 'bg-slate-50',
+    todo: 'bg-indigo-50/70',
+    in_progress: 'bg-sky-50/70',
+    done: 'bg-emerald-50/70',
   };
 
   const headerColors: Record<Task['status'], string> = {
-    todo: 'bg-slate-100',
-    in_progress: 'bg-slate-100',
-    done: 'bg-slate-100',
+    todo: 'bg-indigo-100/80 text-slate-900',
+    in_progress: 'bg-sky-100/80 text-slate-900',
+    done: 'bg-emerald-100/80 text-slate-900',
   };
 
   return (
-    <div className={`flex flex-col border border-slate-200 ${columnColors[status]}`}>
-      <div className={`${headerColors[status]} p-5 font-semibold text-slate-900 border-b border-slate-200`}>
+    <div className={`flex flex-col overflow-hidden ${columnColors[status]}`}>
+      <div className={`${headerColors[status]} p-5 font-semibold border-b border-slate-200`}>
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-base md:text-lg">{title}</h2>
           <span className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-full bg-white px-3 text-sm font-semibold text-slate-900">
