@@ -96,7 +96,7 @@ export default function TasksPage() {
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Task Manager</h1>
+            <h1 className="text-3xl font-bold text-slate-900">AnnoTask</h1>
             {user && <p className="text-sm text-slate-500 mt-1">{user.email}</p>}
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -128,15 +128,16 @@ export default function TasksPage() {
           </div>
         )}
 
-        <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
-
-        <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <button
             onClick={handleAddTask}
             className="inline-flex items-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-700"
           >
             + Add Task
           </button>
+          <div className="w-full sm:w-auto">
+            <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
+          </div>
         </div>
 
         <div className="mt-6">
