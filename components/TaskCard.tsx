@@ -25,9 +25,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <div
-      className={`bg-white rounded-[28px] border border-slate-200 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition ${
-        isDragging ? 'opacity-80 shadow-[0_18px_45px_rgba(15,23,42,0.12)]' : ''
-      }`}
+      className={`bg-white border border-slate-200 border-l-4 border-indigo-500 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+        isDragging ? 'opacity-80 shadow-md' : ''
+      } rounded-none`}
     >
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="min-w-0">

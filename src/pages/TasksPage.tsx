@@ -131,7 +131,7 @@ export default function TasksPage() {
         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <button
             onClick={handleAddTask}
-            className="inline-flex items-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-700"
+            className="inline-flex h-11 items-center justify-center rounded-full bg-fuchsia-600 px-5 text-sm font-semibold text-white transition hover:bg-fuchsia-700"
           >
             + Add Task
           </button>
