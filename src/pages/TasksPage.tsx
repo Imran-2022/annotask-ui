@@ -94,21 +94,21 @@ export default function TasksPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">AnnoTask</h1>
+            <h1 className="text-2xl font-bold text-slate-900">AnnoTask</h1>
             {user && <p className="text-sm text-slate-500 mt-1">{user.email}</p>}
           </div>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => navigate('/annotate')}
-              className="rounded-2xl bg-violet-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:bg-violet-700"
+              className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
             >
               Annotate Images
             </button>
             <button
               onClick={handleLogout}
-              className="rounded-2xl bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/20 transition hover:bg-red-700"
+              className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700"
             >
               Logout
             </button>
@@ -116,7 +116,7 @@ export default function TasksPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-4">
         {error && (
           <div className="mb-6 rounded-3xl bg-red-50 border border-red-200 p-4 text-red-700">
             <div className="flex items-center justify-between gap-4">
@@ -128,15 +128,17 @@ export default function TasksPage() {
           </div>
         )}
 
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <button
-            onClick={handleAddTask}
-            className="inline-flex h-11 items-center justify-center rounded-full bg-fuchsia-600 px-5 text-sm font-semibold text-white transition hover:bg-fuchsia-700"
-          >
-            + Add Task
-          </button>
-          <div className="w-full sm:w-auto">
-            <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
+        <div className="mt-1 overflow-hidden rounded-3xl bg-white px-4 py-3 shadow-sm">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <button
+              onClick={handleAddTask}
+              className="inline-flex h-10 items-center justify-center rounded-full bg-fuchsia-600 px-4 text-sm font-semibold text-white transition hover:bg-fuchsia-700"
+            >
+              + Add Task
+            </button>
+            <div className="w-full sm:w-auto">
+              <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
+            </div>
           </div>
         </div>
 

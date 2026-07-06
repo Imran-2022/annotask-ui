@@ -11,8 +11,6 @@ export const MedicalAnnotationPage: React.FC = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  const [fitMode, setFitMode] = useState<'cover' | 'contain'>('cover');
-
   useEffect(() => {
     annotation.loadImages();
   }, []);
@@ -79,12 +77,26 @@ export const MedicalAnnotationPage: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [annotation]);
 
+  if (annotation.images.length === 0 && annotation.loading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
+        <div className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm text-center">
+          <div className="animate-spin inline-block w-10 h-10 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+          <p className="mt-6 text-slate-700 text-lg font-medium">Loading images...</p>
+          <p className="mt-2 text-slate-500">Please wait while we prepare your annotation workspace.</p>
+        </div>
+      </div>
+    );
+  }
+
   if (annotation.images.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 p-8">
+      <div className="min-h-screen bg-slate-50 px-4 py-10">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-white mb-8">Image Annotation</h1>
-          <UploadPanel onUpload={handleUpload} loading={annotation.loading} />
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+            <h1 className="text-4xl font-bold text-slate-900 mb-6">Image Annotation</h1>
+            <UploadPanel onUpload={handleUpload} loading={annotation.loading} />
+          </div>
         </div>
       </div>
     );
@@ -124,8 +136,6 @@ export const MedicalAnnotationPage: React.FC = () => {
         onUpload={handleUpload}
         onDeleteImage={handleDeleteCurrentImage}
         hasImage={!!annotation.currentImage}
-        fitMode={fitMode}
-        onFitModeChange={setFitMode}
       />
 
       <div className="flex-1 flex overflow-hidden">
@@ -133,7 +143,6 @@ export const MedicalAnnotationPage: React.FC = () => {
           <div className="flex-1 overflow-hidden">
             <MedicalAnnotationCanvas
               imageUrl={annotation.currentImage?.file_url || null}
-              fitMode={fitMode}
               annotations={annotation.annotations}
               currentPoints={annotation.drawing.currentPoints}
               zoom={annotation.canvas.zoom}

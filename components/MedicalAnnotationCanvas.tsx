@@ -16,7 +16,6 @@ interface AnnotationCanvasProps {
   hideAnnotations: boolean;
   hidePreviousAnnotations: boolean;
   applyWindow: boolean;
-  fitMode?: 'cover' | 'contain';
   onAddPoint: (x: number, y: number) => void;
   onClosePolygon: () => void;
   onDeleteAnnotation: (id: number) => void;
@@ -54,7 +53,6 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
   onMoveAnnotation,
   onPan,
   onZoom,
-  fitMode = 'cover',
 }) => {
   const stageRef = useRef<Konva.Stage>(null);
   const layerRef = useRef<Konva.Layer>(null);
@@ -98,12 +96,20 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const container = stageRef.current?.container();
+    if (container) {
+      setStageSize({
+        width: container.offsetWidth,
+        height: container.offsetHeight,
+      });
+    }
+  }, [imageUrl]);
+
   // Scale to cover the available area (fill width or height) to reduce large empty gaps for banner-like images.
   // This chooses the larger scale so the image fills at least one dimension; it may crop along the other axis.
   const imageScale = image
-    ? fitMode === 'contain'
-      ? Math.min(stageSize.width / image.width, stageSize.height / image.height)
-      : Math.max(stageSize.width / image.width, stageSize.height / image.height)
+    ? Math.min(stageSize.width / image.width, stageSize.height / image.height)
     : 1;
   const imageWidth = image ? image.width * imageScale : 0;
   const imageHeight = image ? image.height * imageScale : 0;

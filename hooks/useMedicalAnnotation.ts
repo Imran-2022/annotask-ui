@@ -16,7 +16,7 @@ export const useMedicalAnnotation = () => {
   const [images, setImages] = useState<MedicalImage[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
   const [drawing, setDrawing] = useState<DrawingState>({
@@ -58,6 +58,11 @@ export const useMedicalAnnotation = () => {
     if (!currentImage) return;
     loadAnnotations(currentImage.id);
   }, [currentImage, loadAnnotations]);
+
+  useEffect(() => {
+    if (!currentImage) return;
+    setCanvas({ zoom: 1, panX: 0, panY: 0 });
+  }, [currentImage?.id]);
   
   const loadImages = useCallback(async () => {
     try {

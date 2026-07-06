@@ -18,8 +18,6 @@ interface TopToolbarProps {
   onUpload?: (files: File[]) => void;
   onDeleteImage?: () => void;
   hasImage?: boolean;
-  fitMode?: 'cover' | 'contain';
-  onFitModeChange?: (mode: 'cover' | 'contain') => void;
 }
 
 export const MedicalTopToolbar: React.FC<TopToolbarProps> = ({
@@ -39,8 +37,6 @@ export const MedicalTopToolbar: React.FC<TopToolbarProps> = ({
   onUpload,
   onDeleteImage,
   hasImage = false,
-  fitMode = 'cover',
-  onFitModeChange,
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -51,7 +47,7 @@ export const MedicalTopToolbar: React.FC<TopToolbarProps> = ({
     }
   };
   return (
-    <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-b border-gray-700 px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="bg-white px-4 py-4 flex flex-col gap-4 rounded-b-3xl border-b border-slate-200 shadow-sm sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3 flex-wrap">
         <button
           onClick={onPrevImage}
@@ -152,17 +148,6 @@ export const MedicalTopToolbar: React.FC<TopToolbarProps> = ({
           </button>
         )}
 
-        {onFitModeChange && (
-          <select
-            value={fitMode}
-            onChange={(e) => onFitModeChange(e.target.value as any)}
-            className="px-2 py-2 rounded-lg bg-gray-700 text-white border border-gray-600"
-            title="Image fit mode"
-          >
-            <option value="cover">Fill</option>
-            <option value="contain">Fit</option>
-          </select>
-        )}
       </div>
     </div>
   );
