@@ -22,7 +22,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-end">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
       <label className="sr-only" htmlFor="task-date">
         Select date
       </label>
