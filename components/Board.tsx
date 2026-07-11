@@ -80,15 +80,15 @@ export const Board: React.FC<BoardProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-gray-500">Loading tasks...</div>
+      <div className="flex items-center justify-center h-full">
+        <div className="text-slate-400">Loading tasks...</div>
       </div>
     );
   }
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
         <Column
           title="To Do"
           status="todo"

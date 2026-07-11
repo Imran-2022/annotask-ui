@@ -111,68 +111,65 @@ export default function TasksPage() {
   const filteredTasks = tasks;
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div className="h-full w-full bg-slate-950 text-slate-100 font-sans flex flex-col overflow-hidden">
+      <header className="h-16 border-b border-slate-800 bg-slate-900 px-6 flex items-center justify-between shrink-0 select-none">
+        <div className="flex items-center gap-6">
           <div>
-            <h1 className="text-2xl font-bold">AnnoTask</h1>
-            {user && <p className="text-sm mt-1">{user.email}</p>}
+            <h1 className="font-bold text-xl tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">AnnoTask</h1>
+            {user && <p className="text-xs text-slate-400 font-medium">{user.email}</p>}
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => navigate('/annotate')}
-              className="border px-4 py-2 text-sm font-semibold"
-            >
-              Annotate Images
-            </button>
-            <button
-              onClick={handleLogout}
-              className="border px-4 py-2 text-sm font-semibold"
-            >
-              Logout
-            </button>
-          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate('/annotate')}
+            className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition shadow-md shadow-blue-600/10"
+          >
+            Annotate Images
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition"
+          >
+            Logout
+          </button>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-4">
-        {error && (
-          <div className="mb-6 border p-4">
-            <div className="flex items-center justify-between gap-4">
-              <span>{error}</span>
-              <button onClick={() => setError('')} className="text-sm">
-                ✕
-              </button>
-            </div>
+      <section className="h-14 bg-slate-900/50 border-b border-slate-800/60 px-6 flex items-center justify-between shrink-0">
+        <button
+          onClick={handleAddTask}
+          className="bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white border border-indigo-500/20 hover:border-indigo-500 px-4 py-1.5 rounded-lg text-xs font-bold tracking-wide transition flex items-center gap-1.5"
+        >
+          <span className="text-sm font-normal">+</span> Add Task
+        </button>
+
+        <div className="flex items-center gap-2">
+          <div className="relative flex items-center bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5">
+            <input
+              type="date"
+              value={selectedDate.toISOString().slice(0, 10)}
+              onChange={(e) => handleDateChange(new Date(e.target.value))}
+              className="bg-transparent text-xs text-slate-200 focus:outline-none cursor-pointer"
+            />
           </div>
-        )}
-
-        <div className="mt-1 border border-slate-300 px-3 py-3 sticky top-4 z-20 bg-white">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <button
-                onClick={handleAddTask}
-                className="border border-slate-400 px-4 py-2 text-sm font-semibold"
-              >
-                Add Task
-              </button>
-            </div>
-
-            <div>
-              <DateSelector selectedDate={selectedDate} onDateChange={handleDateChange} />
-            </div>
-          </div>
+          <button
+            onClick={() => handleDateChange(new Date())}
+            className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-medium transition"
+          >
+            Today
+          </button>
         </div>
+      </section>
 
-        <div className="mt-6">
-          <Board
-            tasks={filteredTasks}
-            onEditTask={handleEditTask}
-            onDeleteTask={handleDeleteTask}
-            onReorder={handleReorder}
-            isLoading={isLoading}
-          />
-        </div>
+      <main className="flex-1 p-6 min-h-0 w-full overflow-hidden bg-slate-950">
+        <Board
+          tasks={filteredTasks}
+          onEditTask={handleEditTask}
+          onDeleteTask={handleDeleteTask}
+          onReorder={handleReorder}
+          isLoading={isLoading}
+        />
       </main>
 
       <TaskModal

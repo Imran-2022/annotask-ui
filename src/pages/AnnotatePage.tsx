@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMedicalAnnotation } from '@/hooks/useMedicalAnnotation';
 import { MedicalAnnotationCanvas } from '@/components/MedicalAnnotationCanvas';
-import { MedicalTopToolbar } from '@/components/MedicalTopToolbar';
-import { BottomToolbar } from '@/components/MedicalBottomToolbar';
+import { AnnotateTopToolbar } from '@/components/AnnotateTopToolbar';
+import { AnnotateBottomToolbar } from '@/components/AnnotateBottomToolbar';
 import { UploadPanel } from '@/components/MedicalUploadPanel';
 import { AnnotationsSidebar } from '@/components/AnnotationsSidebar';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
@@ -121,126 +121,130 @@ export default function AnnotatePage(): React.ReactElement {
   return (
     <div
       id="annotation-container"
-      className={`min-h-screen bg-slate-50 ${isFullscreen ? 'h-screen' : ''}`}
+      className={`h-full w-full overflow-hidden bg-slate-900 text-slate-100 font-sans flex flex-col ${isFullscreen ? '' : ''}`}
     >
       {annotation.error && (
-        <div className="bg-rose-500/10 text-rose-700 border border-rose-500/20 px-4 py-2 text-sm mx-auto max-w-7xl mt-4 rounded-xl">
-          Error: {annotation.error}
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-rose-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-xl shadow-lg shadow-rose-500/25 border border-rose-400/30">
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="font-medium">{annotation.error}</span>
+          </div>
         </div>
       )}
 
       {successMessage && (
-        <div className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 px-4 py-2 text-sm mx-auto max-w-7xl mt-4 rounded-xl">
-          {successMessage}
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-emerald-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-xl shadow-lg shadow-emerald-500/25 border border-emerald-400/30">
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="font-medium">{successMessage}</span>
+          </div>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-            <MedicalTopToolbar
-              currentImageIndex={annotation.currentImageIndex}
-              totalImages={annotation.images.length}
-              label={annotation.label}
-              onLabelChange={annotation.setLabel}
+      <AnnotateTopToolbar
+        currentImageIndex={annotation.currentImageIndex}
+        totalImages={annotation.images.length}
+        label={annotation.label}
+        onLabelChange={annotation.setLabel}
+        hideAnnotations={annotation.hideAnnotations}
+        onHideAnnotationsChange={annotation.setHideAnnotations}
+        hidePreviousAnnotations={annotation.hidePreviousAnnotations}
+        onHidePreviousAnnotationsChange={annotation.setHidePreviousAnnotations}
+        applyWindow={annotation.applyWindow}
+        onApplyWindowChange={annotation.setApplyWindow}
+        onPrevImage={() => annotation.navigateImage('prev')}
+        onNextImage={() => annotation.navigateImage('next')}
+        onBack={() => navigate('/tasks')}
+        onUpload={handleUpload}
+        onDeleteImage={handleDeleteCurrentImage}
+        hasImage={!!annotation.currentImage}
+      />
+
+      <main className="flex flex-1 min-h-0 w-full overflow-hidden">
+        <section className="flex-1 flex flex-col bg-slate-950 p-4 relative min-w-0">
+          <div className="flex-1 flex items-center justify-center relative min-h-0 w-full overflow-hidden rounded-lg bg-slate-900 border border-slate-800">
+            <MedicalAnnotationCanvas
+              imageUrl={annotation.currentImage?.file_url || null}
+              annotations={annotation.annotations}
+              currentPoints={annotation.drawing.currentPoints}
+              zoom={annotation.canvas.zoom}
+              panX={annotation.canvas.panX}
+              panY={annotation.canvas.panY}
+              isDrawing={annotation.drawing.isDrawing}
+              tool={annotation.tool}
+              selectedAnnotationId={annotation.selectedAnnotationId}
               hideAnnotations={annotation.hideAnnotations}
-              onHideAnnotationsChange={annotation.setHideAnnotations}
               hidePreviousAnnotations={annotation.hidePreviousAnnotations}
-              onHidePreviousAnnotationsChange={annotation.setHidePreviousAnnotations}
               applyWindow={annotation.applyWindow}
-              onApplyWindowChange={annotation.setApplyWindow}
-              onPrevImage={() => annotation.navigateImage('prev')}
-              onNextImage={() => annotation.navigateImage('next')}
-              onBack={() => navigate('/tasks')}
-              onUpload={handleUpload}
-              onDeleteImage={handleDeleteCurrentImage}
-              hasImage={!!annotation.currentImage}
+              onAddPoint={annotation.addPoint}
+              onClosePolygon={handleSaveAnnotation}
+              onDeleteAnnotation={annotation.deleteAnnotation}
+              onSelectAnnotation={(id) => {
+                annotation.setSelectedAnnotationId(id);
+                if (id !== null) {
+                  annotation.setTool('select');
+                }
+              }}
+              onUpdateAnnotation={annotation.updateAnnotation}
+              onMoveAnnotation={annotation.moveAnnotation}
+              onPan={annotation.pan}
+              onZoom={annotation.zoomWithFocus}
             />
-
-            <div className="flex flex-col lg:flex-row gap-6 p-6">
-              <div className="flex-1 flex flex-col min-h-[60vh] overflow-hidden rounded-3xl border border-slate-200 bg-slate-950">
-                <div className="flex-1 overflow-hidden">
-                  <MedicalAnnotationCanvas
-                    imageUrl={annotation.currentImage?.file_url || null}
-                    annotations={annotation.annotations}
-                    currentPoints={annotation.drawing.currentPoints}
-                    zoom={annotation.canvas.zoom}
-                    panX={annotation.canvas.panX}
-                    panY={annotation.canvas.panY}
-                    isDrawing={annotation.drawing.isDrawing}
-                    tool={annotation.tool}
-                    selectedAnnotationId={annotation.selectedAnnotationId}
-                    hideAnnotations={annotation.hideAnnotations}
-                    hidePreviousAnnotations={annotation.hidePreviousAnnotations}
-                    applyWindow={annotation.applyWindow}
-                    onAddPoint={annotation.addPoint}
-                    onClosePolygon={handleSaveAnnotation}
-                    onDeleteAnnotation={annotation.deleteAnnotation}
-                    onSelectAnnotation={(id) => {
-                      annotation.setSelectedAnnotationId(id);
-                      if (id !== null) {
-                        annotation.setTool('select');
-                      }
-                    }}
-                    onUpdateAnnotation={annotation.updateAnnotation}
-                    onMoveAnnotation={annotation.moveAnnotation}
-                    onPan={annotation.pan}
-                    onZoom={annotation.zoomWithFocus}
-                  />
-                </div>
-
-                <div className="border-t border-slate-800">
-                  <BottomToolbar
-                    tool={annotation.tool}
-                    onToolChange={annotation.setTool}
-                    isDrawing={annotation.drawing.isDrawing}
-                    onStartDrawing={handleStartDrawing}
-                    onStopDrawing={handleStopDrawing}
-                    hasCurrentPolygon={annotation.drawing.currentPoints.length >= 3}
-                    onSaveAnnotation={handleSaveAnnotation}
-                    onDeleteSelected={() => {
-                      if (annotation.selectedAnnotationId) {
-                        annotation.deleteAnnotation(annotation.selectedAnnotationId);
-                        annotation.setSelectedAnnotationId(null);
-                      }
-                    }}
-                    hasSelection={annotation.selectedAnnotationId !== null}
-                    onUndo={annotation.undoLastPoint}
-                    onRedo={annotation.redo}
-                    onZoomIn={annotation.zoomIn}
-                    onZoomOut={annotation.zoomOut}
-                    onResetView={annotation.resetView}
-                    onFullscreen={handleFullscreen}
-                    zoom={annotation.canvas.zoom}
-                  />
-                </div>
-              </div>
-
-              {showSidebar && (
-                <div className="w-full lg:w-80">
-                  <AnnotationsSidebar
-                    annotations={annotation.annotations}
-                    selectedAnnotationId={annotation.selectedAnnotationId}
-                    onSelectAnnotation={(id) => {
-                      annotation.setSelectedAnnotationId(id);
-                      if (id !== null) {
-                        annotation.setTool('select');
-                      }
-                    }}
-                    onDeleteAnnotation={annotation.deleteAnnotation}
-                  />
-                </div>
-              )}
-            </div>
           </div>
-        </div>
-      </div>
+
+          <footer className="h-14 mt-4 bg-slate-800 border border-slate-700 rounded-xl px-4 flex items-center justify-between shrink-0 gap-4 overflow-x-auto select-none">
+            <AnnotateBottomToolbar
+              tool={annotation.tool}
+              onToolChange={annotation.setTool}
+              isDrawing={annotation.drawing.isDrawing}
+              onStartDrawing={handleStartDrawing}
+              onStopDrawing={handleStopDrawing}
+              hasCurrentPolygon={annotation.drawing.currentPoints.length >= 3}
+              onSaveAnnotation={handleSaveAnnotation}
+              onDeleteSelected={() => {
+                if (annotation.selectedAnnotationId) {
+                  annotation.deleteAnnotation(annotation.selectedAnnotationId);
+                  annotation.setSelectedAnnotationId(null);
+                }
+              }}
+              hasSelection={annotation.selectedAnnotationId !== null}
+              onUndo={annotation.undoLastPoint}
+              onRedo={annotation.redo}
+              onZoomIn={annotation.zoomIn}
+              onZoomOut={annotation.zoomOut}
+              onResetView={annotation.resetView}
+              onFullscreen={handleFullscreen}
+              zoom={annotation.canvas.zoom}
+            />
+          </footer>
+        </section>
+
+        {showSidebar && (
+          <aside className="w-80 border-l border-slate-700 bg-slate-800 flex flex-col shrink-0">
+            <AnnotationsSidebar
+              annotations={annotation.annotations}
+              selectedAnnotationId={annotation.selectedAnnotationId}
+              onSelectAnnotation={(id) => {
+                annotation.setSelectedAnnotationId(id);
+                if (id !== null) {
+                  annotation.setTool('select');
+                }
+              }}
+              onDeleteAnnotation={annotation.deleteAnnotation}
+            />
+          </aside>
+        )}
+      </main>
 
       {annotation.loading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-3xl shadow-xl text-center">
-            <div className="animate-spin inline-block w-10 h-10 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
-            <p className="text-slate-900 mt-4 font-medium">Processing...</p>
+        <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl text-center">
+            <div className="animate-spin inline-block w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full"></div>
+            <p className="text-white mt-4 font-medium">Processing...</p>
           </div>
         </div>
       )}
@@ -248,7 +252,7 @@ export default function AnnotatePage(): React.ReactElement {
       <ConfirmDialog
         isOpen={isDeleteImageConfirmOpen}
         title="Delete current image"
-        description="Delete the current image and all its annotations. This cannot be undone."
+        description="Delete the current image and all annotations. This cannot be undone."
         confirmText="Delete"
         cancelText="Cancel"
         onConfirm={confirmDeleteCurrentImage}

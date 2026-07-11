@@ -18,44 +18,42 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   isDragging,
 }) => {
   return (
-    <div className={`border p-4 ${isDragging ? 'opacity-80' : ''}`}>
-      <div className="flex items-start justify-between gap-3 mb-4">
-        <div>
-          <h3 className="text-lg font-bold break-words">{task.title}</h3>
-          {task.description && (
-            <p className="mt-2 text-sm break-words">{task.description}</p>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
+    <div className={`bg-slate-800/70 border border-slate-700/50 rounded-xl p-4 hover:border-slate-600 transition group relative ${isDragging ? 'opacity-80' : ''}`}>
+      <div className="flex justify-between items-start gap-2 mb-1">
+        <h3 className="font-semibold text-sm text-slate-100 group-hover:text-blue-400 transition">{task.title}</h3>
+        <div className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition">
           <button
             onClick={() => onEdit(task)}
-            className="px-2 py-1 border border-slate-400 text-sm"
+            className="text-xs hover:bg-slate-700 p-1 rounded text-slate-300"
+            title="Edit"
           >
-            Edit
+            ✏️
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="px-2 py-1 border border-slate-400 text-sm"
+            className="text-xs hover:bg-rose-950 p-1 rounded text-rose-400"
+            title="Delete"
           >
-            Delete
+            🗑️
           </button>
         </div>
       </div>
 
-      <div className="mb-4 text-sm">
-        <div>{task.priority}</div>
-        {task.tags_list && task.tags_list.length > 0 && (
-          <div className="mt-2">
-            {task.tags_list.join(', ')}
-          </div>
-        )}
+      {task.description && (
+        <p className="text-xs text-slate-400 mb-3 leading-relaxed">{task.description}</p>
+      )}
+
+      <div className="flex flex-wrap items-center gap-1.5 mb-3">
+        <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">{task.priority}</span>
+        {task.tags_list && task.tags_list.length > 0 &&
+          task.tags_list.map((tag) => (
+            <span key={tag} className="bg-slate-700 text-slate-300 text-[10px] px-2 py-0.5 rounded-md font-medium">{tag}</span>
+          ))}
       </div>
 
-      <div className="flex items-center gap-2 text-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        {format(new Date(task.due_date), 'MMM d, yyyy')}
+      <div className="flex items-center gap-1.5 text-[11px] text-slate-400 border-t border-slate-700/40 pt-2.5">
+        <span>📅</span>
+        <span>{format(new Date(task.due_date), 'MMM d, yyyy')}</span>
       </div>
     </div>
   );

@@ -230,13 +230,13 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
   const filteredAnnotations = hidePreviousAnnotations ? [] : annotations;
 
   return (
-    <div className="relative w-full h-full min-h-[32rem] bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+    <div className="relative w-full h-full min-h-[32rem] bg-slate-900 rounded-lg overflow-hidden border border-slate-800">
       {!image && (
-        <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm px-6 text-center">
+        <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-sm px-6 text-center">
           {loadError ? (
             <div>
-              <p className="font-semibold text-red-300">{loadError}</p>
-              <p className="mt-2 text-sm text-gray-400">Try reloading or check the backend media URL.</p>
+              <p className="font-semibold text-rose-300">{loadError}</p>
+              <p className="mt-2 text-sm text-slate-400">Try reloading or check the backend media URL.</p>
             </div>
           ) : (
             'Upload images to start annotating. Use draw mode to place polygon points.'
