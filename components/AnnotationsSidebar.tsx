@@ -22,14 +22,14 @@ export const AnnotationsSidebar: React.FC<AnnotationsSidebarProps> = ({
   onDeleteAnnotation,
 }) => {
   return (
-    <div className="w-64 bg-gray-800 border-l border-gray-700 overflow-hidden flex flex-col">
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-b border-gray-700 px-4 py-3">
-        <h2 className="text-white font-semibold text-sm">Annotations ({annotations.length})</h2>
+    <div className="w-64 border-l border-slate-200 bg-white overflow-hidden flex flex-col">
+      <div className="border-b border-slate-200 px-4 py-3">
+        <h2 className="text-slate-900 font-semibold text-sm">Annotations ({annotations.length})</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {annotations.length === 0 ? (
-          <div className="p-4 text-center text-gray-400 text-sm">
+          <div className="p-4 text-center text-slate-500 text-sm">
             No annotations yet. Draw on the image to create one.
           </div>
         ) : (
@@ -38,10 +38,10 @@ export const AnnotationsSidebar: React.FC<AnnotationsSidebarProps> = ({
               <div
                 key={ann.id}
                 onClick={() => onSelectAnnotation(selectedAnnotationId === ann.id ? null : ann.id)}
-                className={`p-3 rounded-lg cursor-pointer transition group ${
+                className={`p-3 cursor-pointer transition border ${
                   selectedAnnotationId === ann.id
-                    ? 'bg-blue-700 text-white'
-                    : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                    ? 'border-blue-500 bg-slate-100 text-slate-900'
+                    : 'border-slate-200 bg-white text-slate-900 hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -52,7 +52,7 @@ export const AnnotationsSidebar: React.FC<AnnotationsSidebarProps> = ({
                     ></div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-mono truncate capitalize">{ann.label}</p>
-                      <p className="text-xs opacity-75">{ann.polygon_points.length} points</p>
+                      <p className="text-xs text-slate-500">{ann.polygon_points.length} points</p>
                     </div>
                   </div>
                   <button
@@ -60,7 +60,7 @@ export const AnnotationsSidebar: React.FC<AnnotationsSidebarProps> = ({
                       e.stopPropagation();
                       onDeleteAnnotation(ann.id);
                     }}
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-600 rounded transition"
+                    className="p-1 text-slate-700 hover:text-red-600 transition"
                     title="Delete annotation"
                   >
                     <FaTrash size={12} />

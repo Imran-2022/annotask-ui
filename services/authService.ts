@@ -95,6 +95,13 @@ export const authService = {
     await apiClient.post('/auth/logout/');
   },
 
+  async refreshToken(refresh: string): Promise<{ access: string }> {
+    const response = await axios.post(`${apiClient.defaults.baseURL}/auth/token/refresh/`, {
+      refresh,
+    });
+    return response.data;
+  },
+
   async getCurrentUser(): Promise<User> {
     const response = await apiClient.get<User>('/auth/me/');
     return response.data;

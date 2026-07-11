@@ -5,6 +5,7 @@ import { MedicalTopToolbar } from '../../components/MedicalTopToolbar';
 import { BottomToolbar } from '../../components/MedicalBottomToolbar';
 import { UploadPanel } from '../../components/MedicalUploadPanel';
 import { AnnotationsSidebar } from '../../components/AnnotationsSidebar';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 export const MedicalAnnotationPage: React.FC = () => {
   const annotation = useMedicalAnnotation();
@@ -28,10 +29,21 @@ export const MedicalAnnotationPage: React.FC = () => {
     await annotation.uploadImages(files);
   };
 
-  const handleDeleteCurrentImage = async () => {
+  const [isDeleteImageConfirmOpen, setIsDeleteImageConfirmOpen] = useState(false);
+
+  const handleDeleteCurrentImage = () => {
     if (!annotation.currentImage) return;
-    if (!confirm('Delete current image? This cannot be undone.')) return;
+    setIsDeleteImageConfirmOpen(true);
+  };
+
+  const confirmDeleteCurrentImage = async () => {
+    if (!annotation.currentImage) return;
     await annotation.deleteImage(annotation.currentImage.id);
+    setIsDeleteImageConfirmOpen(false);
+  };
+
+  const cancelDeleteCurrentImage = () => {
+    setIsDeleteImageConfirmOpen(false);
   };
 
   const handleStartDrawing = () => {
@@ -103,23 +115,22 @@ export const MedicalAnnotationPage: React.FC = () => {
   }
 
   return (
-    <div
-      id="annotation-container"
-      className={`flex flex-col h-screen bg-gray-950 ${isFullscreen ? 'p-0' : ''}`}
-    >
+    <div id="annotation-container" className={`min-h-screen bg-slate-50 ${isFullscreen ? 'h-screen' : ''}`}>
       {annotation.error && (
-        <div className="bg-red-900 text-white px-4 py-2 text-sm">
+        <div className="bg-rose-500/10 text-rose-700 border border-rose-500/20 px-4 py-2 text-sm mx-auto max-w-7xl mt-4 rounded-xl">
           Error: {annotation.error}
         </div>
       )}
 
       {successMessage && (
-        <div className="bg-emerald-700 text-white px-4 py-2 text-sm animate-pulse">
+        <div className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 px-4 py-2 text-sm mx-auto max-w-7xl mt-4 rounded-xl">
           {successMessage}
         </div>
       )}
 
-      <MedicalTopToolbar
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="border border-slate-300 bg-white shadow-sm">
+          <MedicalTopToolbar
         currentImageIndex={annotation.currentImageIndex}
         totalImages={annotation.images.length}
         label={annotation.label}
@@ -212,12 +223,22 @@ export const MedicalAnnotationPage: React.FC = () => {
 
       {annotation.loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg">
-            <div className="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
-            <p className="text-white mt-4">Processing...</p>
+          <div className="bg-white p-6 border border-slate-300 shadow-xl text-center">
+            <div className="animate-spin inline-block w-8 h-8 border-4 border-slate-500 border-t-transparent rounded-full"></div>
+            <p className="text-slate-900 mt-4">Processing...</p>
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={isDeleteImageConfirmOpen}
+        title="Delete current image"
+        description="Delete the current image and all annotations. This cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={confirmDeleteCurrentImage}
+        onCancel={cancelDeleteCurrentImage}
+      />
     </div>
   );
 };

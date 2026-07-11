@@ -17,72 +17,41 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onDelete,
   isDragging,
 }) => {
-  const priorityStyles: Record<Task['priority'], string> = {
-    high: 'border-rose-500/80 bg-rose-50',
-    medium: 'border-amber-500/80 bg-amber-50',
-    low: 'border-emerald-500/80 bg-emerald-50',
-  };
-
   return (
-    <div
-      className={`border-l-4 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${priorityStyles[task.priority]} ${
-        isDragging ? 'opacity-80 shadow-md' : ''
-      } rounded-3xl`}
-    >
+    <div className={`border p-4 ${isDragging ? 'opacity-80' : ''}`}>
       <div className="flex items-start justify-between gap-3 mb-4">
-        <div className="min-w-0">
-          <h3 className="text-lg font-bold text-slate-900 break-words">{task.title}</h3>
+        <div>
+          <h3 className="text-lg font-bold break-words">{task.title}</h3>
           {task.description && (
-            <p className="mt-2 text-sm text-slate-600 break-words">{task.description}</p>
+            <p className="mt-2 text-sm break-words">{task.description}</p>
           )}
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => onEdit(task)}
-            className="rounded-full bg-slate-100 p-2 text-slate-600 hover:bg-slate-200 transition shadow-sm"
-            title="Edit task"
+            className="px-2 py-1 border border-slate-400 text-sm"
           >
-            ✎
+            Edit
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="rounded-full bg-slate-100 p-2 text-rose-600 hover:bg-rose-100 transition shadow-sm"
-            title="Delete task"
+            className="px-2 py-1 border border-slate-400 text-sm"
           >
-            ✕
+            Delete
           </button>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-4">
-        <span
-          className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold ${
-            priorityStyles[task.priority]
-          }`}
-        >
-          {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
-        </span>
-
+      <div className="mb-4 text-sm">
+        <div>{task.priority}</div>
         {task.tags_list && task.tags_list.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {task.tags_list.slice(0, 2).map((tag, idx) => (
-              <span
-                key={idx}
-                className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-[11px] font-semibold text-violet-700"
-              >
-                {tag}
-              </span>
-            ))}
-            {task.tags_list.length > 2 && (
-              <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-700">
-                +{task.tags_list.length - 2}
-              </span>
-            )}
+          <div className="mt-2">
+            {task.tags_list.join(', ')}
           </div>
         )}
       </div>
 
-      <div className="flex items-center gap-2 text-sm text-slate-500">
+      <div className="flex items-center gap-2 text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>

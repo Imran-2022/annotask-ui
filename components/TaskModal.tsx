@@ -68,16 +68,17 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-lg max-w-md w-full">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/20">
+      <div className="border border-slate-300 bg-white max-w-md w-full">
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold">
               {task ? 'Edit Task' : 'Add Task'}
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl leading-none"
+              className="text-xl leading-none"
+              aria-label="Close task form"
             >
               ✕
             </button>
@@ -85,7 +86,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="title" className="block text-sm mb-1">
                 Title *
               </label>
               <input
@@ -95,13 +96,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 border outline-none"
                 placeholder="Task title"
               />
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="description" className="block text-sm mb-1">
                 Description
               </label>
               <textarea
@@ -109,7 +110,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                className="w-full px-3 py-2 border outline-none resize-none"
                 placeholder="Task description"
                 rows={3}
               />
@@ -117,7 +118,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="status" className="block text-sm mb-1">
                   Status
                 </label>
                 <select
@@ -125,7 +126,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border outline-none"
                 >
                   <option value="todo">To Do</option>
                   <option value="in_progress">In Progress</option>
@@ -134,7 +135,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               </div>
 
               <div>
-                <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="priority" className="block text-sm mb-1">
                   Priority
                 </label>
                 <select
@@ -142,7 +143,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                   name="priority"
                   value={formData.priority}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border outline-none"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -152,7 +153,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
             </div>
 
             <div>
-              <label htmlFor="due_date" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="due_date" className="block text-sm mb-1">
                 Due Date *
               </label>
               <input
@@ -162,12 +163,12 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 value={formData.due_date}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 border outline-none"
               />
             </div>
 
             <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="tags" className="block text-sm mb-1">
                 Tags (comma-separated)
               </label>
               <input
@@ -176,7 +177,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 name="tags"
                 value={formData.tags}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 border outline-none"
                 placeholder="work, urgent, bug"
               />
             </div>
@@ -185,14 +186,14 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+                className="flex-1 px-4 py-2 border border-slate-400 font-medium"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 border border-slate-400 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Saving...' : 'Save'}
               </button>

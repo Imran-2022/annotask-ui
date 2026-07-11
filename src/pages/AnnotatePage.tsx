@@ -6,6 +6,7 @@ import { MedicalTopToolbar } from '@/components/MedicalTopToolbar';
 import { BottomToolbar } from '@/components/MedicalBottomToolbar';
 import { UploadPanel } from '@/components/MedicalUploadPanel';
 import { AnnotationsSidebar } from '@/components/AnnotationsSidebar';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 
 export default function AnnotatePage(): React.ReactElement {
   const annotation = useMedicalAnnotation();
@@ -30,10 +31,21 @@ export default function AnnotatePage(): React.ReactElement {
     await annotation.uploadImages(files);
   };
 
-  const handleDeleteCurrentImage = async () => {
+  const [isDeleteImageConfirmOpen, setIsDeleteImageConfirmOpen] = useState(false);
+
+  const handleDeleteCurrentImage = () => {
     if (!annotation.currentImage) return;
-    if (!confirm('Delete current image? This cannot be undone.')) return;
+    setIsDeleteImageConfirmOpen(true);
+  };
+
+  const confirmDeleteCurrentImage = async () => {
+    if (!annotation.currentImage) return;
     await annotation.deleteImage(annotation.currentImage.id);
+    setIsDeleteImageConfirmOpen(false);
+  };
+
+  const cancelDeleteCurrentImage = () => {
+    setIsDeleteImageConfirmOpen(false);
   };
 
   const handleStartDrawing = () => {
@@ -232,6 +244,16 @@ export default function AnnotatePage(): React.ReactElement {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={isDeleteImageConfirmOpen}
+        title="Delete current image"
+        description="Delete the current image and all its annotations. This cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={confirmDeleteCurrentImage}
+        onCancel={cancelDeleteCurrentImage}
+      />
     </div>
   );
 }
