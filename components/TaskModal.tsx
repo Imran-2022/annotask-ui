@@ -35,7 +35,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
         description: task.description || '',
         status: task.status,
         priority: task.priority,
-        due_date: task.due_date ? format(new Date(task.due_date), 'MM/dd/yyyy') : format(new Date(), 'MM/dd/yyyy'),
+        due_date: task.due_date ? format(new Date(task.due_date), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
         tags: task.tags,
       });
     } else {
@@ -44,7 +44,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
         description: '',
         status: 'todo',
         priority: 'medium',
-        due_date: format(new Date(), 'MM/dd/yyyy'),
+        due_date: format(new Date(), 'yyyy-MM-dd'),
         tags: '',
       });
     }

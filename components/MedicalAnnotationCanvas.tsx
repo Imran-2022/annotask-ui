@@ -106,10 +106,10 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
     }
   }, [imageUrl]);
 
-  // Scale to cover the available area (fill width or height) to reduce large empty gaps for banner-like images.
-  // This chooses the larger scale so the image fills at least one dimension; it may crop along the other axis.
+  // Scale to fit the entire image within the available area (contain).
+  // This chooses the smaller scale so the entire image is visible without cropping.
   const imageScale = image
-    ? Math.max(stageSize.width / image.width, stageSize.height / image.height)
+    ? Math.min(stageSize.width / image.width, stageSize.height / image.height)
     : 1;
   const imageWidth = image ? image.width * imageScale : 0;
   const imageHeight = image ? image.height * imageScale : 0;
@@ -231,16 +231,22 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
 
   return (
     <div className="relative w-full h-full min-h-[32rem] bg-slate-900 rounded-lg overflow-hidden border border-slate-800">
-      {!image && (
+      {!image && !loadError && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-slate-400">
+            <svg className="w-16 h-16 mx-auto mb-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p className="text-sm">No image loaded. Use the Upload button above to add images.</p>
+          </div>
+        </div>
+      )}
+      {loadError && (
         <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-sm px-6 text-center">
-          {loadError ? (
-            <div>
-              <p className="font-semibold text-rose-300">{loadError}</p>
-              <p className="mt-2 text-sm text-slate-400">Try reloading or check the backend media URL.</p>
-            </div>
-          ) : (
-            'Upload images to start annotating. Use draw mode to place polygon points.'
-          )}
+          <div>
+            <p className="font-semibold text-rose-300">{loadError}</p>
+            <p className="mt-2 text-sm text-slate-400">Try reloading or check the backend media URL.</p>
+          </div>
         </div>
       )}
 

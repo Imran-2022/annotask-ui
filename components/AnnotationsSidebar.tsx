@@ -19,7 +19,7 @@ export const AnnotationsSidebar: React.FC<AnnotationsSidebarProps> = ({
       <div className="p-4 border-b border-slate-700 flex items-center justify-between">
         <h2 className="font-semibold text-sm tracking-wide text-slate-200">Annotations ({annotations.length})</h2>
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 text-slate-400 text-center flex flex-col justify-center items-center">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 text-slate-400 text-start">
         {annotations.length === 0 ? (
           <>
             <div className="text-3xl opacity-30 mb-2">👁️‍🗨️</div>

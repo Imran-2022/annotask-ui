@@ -43,9 +43,15 @@ export const Column: React.FC<ColumnProps> = ({
           >
             {tasks.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center p-6 text-center text-slate-500 select-none border-2 border-dashed border-slate-800/60 rounded-xl">
-                <span className="text-2xl mb-2 opacity-40">
-                  {status === 'done' ? '✅' : '⏳'}
-                </span>
+                {status === 'done' ? (
+                  <svg className="w-8 h-8 mb-2 opacity-40 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-8 h-8 mb-2 opacity-40 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )}
                 <p className="text-xs font-semibold text-slate-400">No tasks yet</p>
                 <p className="text-[11px] text-slate-500 mt-0.5">Add a task to begin.</p>
               </div>

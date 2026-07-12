@@ -95,24 +95,11 @@ export default function AnnotatePage(): React.ReactElement {
 
   if (annotation.images.length === 0 && annotation.loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
-        <div className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm text-center">
-          <div className="animate-spin inline-block w-10 h-10 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
-          <p className="mt-6 text-slate-700 text-lg font-medium">Loading images...</p>
-          <p className="mt-2 text-slate-500">Please wait while we prepare your annotation workspace.</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (annotation.images.length === 0) {
-    return (
-      <div className="min-h-screen bg-slate-50 px-4 py-10">
-        <div className="max-w-4xl mx-auto">
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-            <h1 className="text-4xl font-bold text-slate-900 mb-6">Image Annotation</h1>
-            <UploadPanel onUpload={handleUpload} loading={annotation.loading} />
-          </div>
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4 py-10">
+        <div className="rounded-3xl border border-slate-700 bg-slate-800 p-10 shadow-sm text-center">
+          <div className="animate-spin inline-block w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full" />
+          <p className="mt-6 text-slate-200 text-lg font-medium">Loading images...</p>
+          <p className="mt-2 text-slate-400">Please wait while we prepare your annotation workspace.</p>
         </div>
       </div>
     );
