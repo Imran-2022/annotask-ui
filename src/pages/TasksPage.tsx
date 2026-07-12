@@ -111,7 +111,7 @@ export default function TasksPage() {
   const filteredTasks = tasks;
 
   return (
-    <div className="h-full w-full bg-slate-950 text-slate-100 font-sans flex flex-col overflow-hidden">
+    <div className="h-full w-full max-w-[1800px] mx-auto bg-slate-950 text-slate-100 font-sans flex flex-col overflow-hidden px-4 sm:px-6 lg:px-8 xl:px-14">
       <header className="h-16 border-b border-slate-800 bg-slate-900 px-6 flex items-center justify-between shrink-0 select-none">
         <div className="flex items-center gap-6">
           <div>

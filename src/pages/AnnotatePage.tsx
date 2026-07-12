@@ -121,7 +121,7 @@ export default function AnnotatePage(): React.ReactElement {
   return (
     <div
       id="annotation-container"
-      className={`h-full w-full overflow-hidden bg-slate-900 text-slate-100 font-sans flex flex-col ${isFullscreen ? '' : ''}`}
+      className={`h-full w-full max-w-[1800px] mx-auto overflow-hidden bg-slate-900 text-slate-100 font-sans flex flex-col px-4 sm:px-6 lg:px-8 xl:px-14 ${isFullscreen ? '' : ''}`}
     >
       {annotation.error && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-rose-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-xl shadow-lg shadow-rose-500/25 border border-rose-400/30">
