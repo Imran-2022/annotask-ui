@@ -67,10 +67,6 @@ export const AnnotateTopToolbar: React.FC<TopToolbarProps> = ({
           </button>
         </div>
 
-        <div className="px-3 py-1 rounded-md bg-slate-700 text-xs text-slate-200">
-          Auto label polygons
-        </div>
-
         <div className="flex items-center gap-4 text-xs text-slate-300 ml-2">
           <label className="flex items-center gap-1.5 cursor-pointer" title="Toggle visibility for all annotations on the current image">
             <input
@@ -80,24 +76,6 @@ export const AnnotateTopToolbar: React.FC<TopToolbarProps> = ({
               className="rounded accent-blue-500"
             />
             Hide all annotations
-          </label>
-          <label className="flex items-center gap-1.5 cursor-pointer" title="Hide annotations created on previous images">
-            <input
-              type="checkbox"
-              checked={hidePreviousAnnotations}
-              onChange={(e) => onHidePreviousAnnotationsChange(e.target.checked)}
-              className="rounded accent-blue-500"
-            />
-            Hide previous image annotations
-          </label>
-          <label className="flex items-center gap-1.5 cursor-pointer" title="Apply a CT window-style filter to the image display">
-            <input
-              type="checkbox"
-              checked={applyWindow}
-              onChange={(e) => onApplyWindowChange(e.target.checked)}
-              className="rounded accent-blue-500"
-            />
-            Apply CT window filter
           </label>
         </div>
       </div>

@@ -27,7 +27,7 @@ export const AnnotationsSidebar: React.FC<AnnotationsSidebarProps> = ({
           </>
         ) : (
           <div className="space-y-2 w-full">
-            {annotations.map((ann) => (
+            {annotations.map((ann, index) => (
               <button
                 key={ann.id}
                 type="button"
@@ -39,7 +39,7 @@ export const AnnotationsSidebar: React.FC<AnnotationsSidebarProps> = ({
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm font-medium capitalize">{ann.label}</span>
+                  <span className="text-sm font-medium">Annotation {index + 1}</span>
                   <span className="text-xs text-slate-400">{ann.polygon_points.length} pts</span>
                 </div>
               </button>
