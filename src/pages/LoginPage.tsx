@@ -42,7 +42,7 @@ export default function LoginPage() {
             ANNOTASK
           </div>
           <h2 className="text-3xl font-semibold text-white">Login</h2>
-          <p className="text-slate-400 mt-2">Welcome back — continue your annotation workflow.</p>
+          <p className="text-slate-400 mt-2">Enter your email and password to access tasks and image annotation.</p>
         </div>
 
         {error && (
@@ -59,6 +59,7 @@ export default function LoginPage() {
             <input
               id="email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -74,6 +75,7 @@ export default function LoginPage() {
             <input
               id="password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

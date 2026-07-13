@@ -17,6 +17,7 @@ interface BottomToolbarProps {
   onResetView: () => void;
   onFullscreen: () => void;
   zoom: number;
+  disabled?: boolean;
 }
 
 export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
@@ -36,14 +37,17 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
   onResetView,
   onFullscreen,
   zoom,
+  disabled = false,
 }) => {
   const isDrawTool = tool === 'draw';
+  const isInteractive = !disabled;
 
   return (
     <div className="flex items-center justify-between w-full gap-4">
       <div className="flex items-center gap-2">
         <button
           onClick={() => {
+            if (!isInteractive) return;
             if (isDrawing) {
               onStopDrawing();
             } else {
@@ -51,8 +55,11 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
               onStartDrawing();
             }
           }}
+          disabled={!isInteractive}
           className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${
-            isDrawing
+            !isInteractive
+              ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+              : isDrawing
               ? 'bg-emerald-600 text-white hover:bg-emerald-500'
               : 'bg-blue-600 text-white hover:bg-blue-500'
           }`}
@@ -64,8 +71,14 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
         </button>
 
         <button
-          onClick={() => onToolChange('pan')}
-          className="hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition"
+          onClick={() => {
+            if (!isInteractive) return;
+            onToolChange('pan');
+          }}
+          disabled={!isInteractive}
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${
+            !isInteractive ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-700 text-slate-300'
+          }`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364-6.364l-2.121 2.121M8.757 15.243l-2.121 2.121M17.121 17.121l-2.121-2.121M8.757 8.757L6.636 10.879" />
@@ -76,15 +89,17 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
 
       <div className="flex items-center bg-slate-700 rounded-lg overflow-hidden border border-slate-600">
         <button
-          onClick={onZoomOut}
-          className="px-3 py-1 hover:bg-slate-600 text-sm"
+          onClick={() => isInteractive && onZoomOut()}
+          disabled={!isInteractive}
+          className={`px-3 py-1 text-sm ${!isInteractive ? 'text-slate-500 cursor-not-allowed' : 'hover:bg-slate-600'}`}
         >
           -
         </button>
         <span className="px-3 py-1 text-xs font-mono font-semibold min-w-[50px] text-center">{Math.round(zoom * 100)}%</span>
         <button
-          onClick={onZoomIn}
-          className="px-3 py-1 hover:bg-slate-600 text-sm"
+          onClick={() => isInteractive && onZoomIn()}
+          disabled={!isInteractive}
+          className={`px-3 py-1 text-sm ${!isInteractive ? 'text-slate-500 cursor-not-allowed' : 'hover:bg-slate-600'}`}
         >
           +
         </button>
@@ -92,9 +107,9 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
 
       <div className="flex items-center gap-1.5">
         <button
-          onClick={onSaveAnnotation}
-          disabled={!hasCurrentPolygon}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${hasCurrentPolygon ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-60'}`}
+          onClick={() => isInteractive && onSaveAnnotation()}
+          disabled={!isInteractive || !hasCurrentPolygon}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${!isInteractive || !hasCurrentPolygon ? 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-60' : 'bg-emerald-600 hover:bg-emerald-500 text-white'}`}
           title="Save Polygon"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,9 +118,9 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
           Save
         </button>
         <button
-          onClick={onDeleteSelected}
-          disabled={!hasSelection}
-          className="hover:bg-slate-700 text-slate-400 hover:text-rose-400 p-1.5 rounded-md text-xs transition disabled:opacity-40 disabled:cursor-not-allowed"
+          onClick={() => isInteractive && onDeleteSelected()}
+          disabled={!isInteractive || !hasSelection}
+          className={`p-1.5 rounded-md text-xs transition ${!isInteractive || !hasSelection ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-700 text-slate-400 hover:text-rose-400'}`}
           title="Delete"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,8 +128,9 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
           </svg>
         </button>
         <button
-          onClick={onUndo}
-          className="hover:bg-slate-700 text-slate-300 p-1.5 rounded-md text-xs transition"
+          onClick={() => isInteractive && onUndo()}
+          disabled={!isInteractive}
+          className={`p-1.5 rounded-md text-xs transition ${!isInteractive ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-700 text-slate-300'}`}
           title="Undo"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,8 +138,9 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
           </svg>
         </button>
         <button
-          onClick={onRedo}
-          className="hover:bg-slate-700 text-slate-300 p-1.5 rounded-md text-xs transition"
+          onClick={() => isInteractive && onRedo()}
+          disabled={!isInteractive}
+          className={`p-1.5 rounded-md text-xs transition ${!isInteractive ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-700 text-slate-300'}`}
           title="Redo"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,8 +148,9 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
           </svg>
         </button>
         <button
-          onClick={onResetView}
-          className="hover:bg-slate-700 text-slate-300 p-1.5 rounded-md text-xs transition"
+          onClick={() => isInteractive && onResetView()}
+          disabled={!isInteractive}
+          className={`p-1.5 rounded-md text-xs transition ${!isInteractive ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-700 text-slate-300'}`}
           title="Reset"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,8 +158,9 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
           </svg>
         </button>
         <button
-          onClick={onFullscreen}
-          className="hover:bg-slate-700 text-slate-300 p-1.5 rounded-md text-xs transition"
+          onClick={() => isInteractive && onFullscreen()}
+          disabled={!isInteractive}
+          className={`p-1.5 rounded-md text-xs transition ${!isInteractive ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-700 text-slate-300'}`}
           title="Fullscreen"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,67 +1,89 @@
-# Frontend Setup Instructions
+# Task Management + Image Annotation Frontend
 
-## Installation
+## Local Setup
 
-1. Install dependencies:
+### Requirements
+- Node 20.20.2+
+- npm
+
+### 1. Install dependencies
 ```bash
 npm install
 ```
 
-2. Create a `.env.local` file in the root directory:
+### 2. Optional environment variables
+Create a `.env` file in the frontend root if you want to override the backend API URL.
+```env
+VITE_API_URL=http://localhost:8000/api
 ```
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
-```
+If no `.env` file is provided, the app defaults to `http://localhost:8000/api`.
 
-3. Run the development server:
+### 3. Run the development server
 ```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:3000`
+The app will be available at `http://localhost:5173` by default.
 
-## Project Structure
-
-```
-frontend/
-├── app/
-│   ├── layout.tsx          # Root layout
-│   ├── page.tsx           # Home page
-│   ├── login/page.tsx     # Login page
-│   ├── register/page.tsx  # Register page
-│   └── tasks/page.tsx     # Main task management page
-├── components/
-│   ├── Board.tsx          # Kanban board component
-│   ├── Column.tsx         # Kanban column component
-│   ├── TaskCard.tsx       # Individual task card
-│   ├── TaskModal.tsx      # Task creation/edit modal
-│   └── DateSelector.tsx   # Date picker component
-├── store/
-│   ├── authStore.ts       # Authentication state (Zustand)
-│   └── taskStore.ts       # Task state (Zustand)
-├── services/
-│   ├── apiClient.ts       # Axios instance with interceptors
-│   ├── authService.ts     # Auth API calls
-│   └── taskService.ts     # Task API calls
-└── types/
-    └── index.ts           # TypeScript types
-```
+## Pages
+- `/login` — login page
+- `/register` — register page
+- `/tasks` — task management Kanban board with date filtering
+- `/annotate` — image annotation page with upload and polygon annotation support
 
 ## Features
+- Email/password login with JWT-based auth
+- Task board with "To Do", "In Progress", and "Done" columns
+- Date selector for daily task filtering
+- Add/edit/delete tasks via modal
+- Drag and drop tasks between columns
+- Task persistence through Django backend APIs
+- Image upload and annotation storage
+- Polygon drawing and annotation management
 
-- **Login/Register**: User authentication with email and password
-- **Task Management**: Create, read, update, delete tasks
-- **Kanban Board**: Drag-and-drop tasks between columns
-- **Date Filtering**: View and manage tasks by date
-- **Priority Levels**: Low, Medium, High
-- **Task Tags**: Organize tasks with tags
-- **Status Tracking**: To Do, In Progress, Done
+## Project structure
+```
+frontend/
+├── src/
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── pages/
+│   │   ├── LoginPage.tsx
+│   │   ├── RegisterPage.tsx
+│   │   ├── TasksPage.tsx
+│   │   └── AnnotatePage.tsx
+│   ├── components/
+│   │   ├── Board.tsx
+│   │   ├── Column.tsx
+│   │   ├── TaskCard.tsx
+│   │   ├── TaskModal.tsx
+│   │   ├── DateSelector.tsx
+│   │   ├── AnnotateTopToolbar.tsx
+│   │   └── AnnotationsSidebar.tsx
+│   ├── context/
+│   │   ├── AuthContext.tsx
+│   │   └── TaskContext.tsx
+│   ├── services/
+│   │   ├── apiClient.ts
+│   │   ├── authService.ts
+│   │   ├── taskService.ts
+│   │   ├── medicalService.ts
+│   │   └── wsCollaborationService.ts
+│   └── hooks/
+│       └── useMedicalAnnotation.ts
+```
 
-## Technologies Used
+## Technologies used
+- React 18 + TypeScript
+- Vite
+- Tailwind CSS
+- React Router DOM
+- Axios
+- @hello-pangea/dnd
+- Konva / react-konva
+- date-fns
 
-- **Next.js 14**: React framework
-- **React**: UI library
-- **Tailwind CSS**: Styling
-- **Zustand**: State management
-- **Axios**: HTTP client
-- **react-beautiful-dnd**: Drag and drop
-- **date-fns**: Date manipulation
+## Notes
+- Frontend is built with Vite, not Next.js.
+- The app is aligned with the 404 project requirements: login, tasks page, daily task filtering, Kanban drag-and-drop, and image annotation.
+- Use `/tasks` after login to manage tasks, and `/annotate` for image annotation.

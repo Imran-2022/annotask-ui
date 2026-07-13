@@ -3,41 +3,32 @@ import React from 'react';
 interface TopToolbarProps {
   currentImageIndex: number;
   totalImages: number;
-  label: 'tumor' | 'organ' | 'vessel' | 'other';
-  onLabelChange: (label: 'tumor' | 'organ' | 'vessel' | 'other') => void;
   hideAnnotations: boolean;
   onHideAnnotationsChange: (hide: boolean) => void;
-  hidePreviousAnnotations: boolean;
-  onHidePreviousAnnotationsChange: (hide: boolean) => void;
-  applyWindow: boolean;
-  onApplyWindowChange: (apply: boolean) => void;
   onPrevImage: () => void;
   onNextImage: () => void;
   onBack?: () => void;
   onUpload?: (files: File[]) => void;
   onDeleteImage?: () => void;
   hasImage?: boolean;
+  isImageAvailable?: boolean;
 }
 
 export const AnnotateTopToolbar: React.FC<TopToolbarProps> = ({
   currentImageIndex,
   totalImages,
-  label,
-  onLabelChange,
   hideAnnotations,
   onHideAnnotationsChange,
-  hidePreviousAnnotations,
-  onHidePreviousAnnotationsChange,
-  applyWindow,
-  onApplyWindowChange,
   onPrevImage,
   onNextImage,
   onBack,
   onUpload,
   onDeleteImage,
   hasImage = false,
+  isImageAvailable = true,
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  const isDisabled = !isImageAvailable;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && onUpload) {
@@ -52,7 +43,8 @@ export const AnnotateTopToolbar: React.FC<TopToolbarProps> = ({
         <div className="flex items-center bg-slate-700 rounded-md overflow-hidden">
           <button
             onClick={onPrevImage}
-            className="px-3 py-1.5 hover:bg-slate-600 border-r border-slate-600 transition text-sm"
+            disabled={isDisabled}
+            className={`px-3 py-1.5 border-r border-slate-600 transition text-sm ${isDisabled ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-600'}`}
             title="Previous Image"
           >
             &lsaquo;
@@ -60,7 +52,8 @@ export const AnnotateTopToolbar: React.FC<TopToolbarProps> = ({
           <span className="px-3 py-1.5 text-xs font-medium tracking-wide text-slate-100">Axial ({currentImageIndex + 1}/{totalImages})</span>
           <button
             onClick={onNextImage}
-            className="px-3 py-1.5 hover:bg-slate-600 border-l border-slate-600 transition text-sm"
+            disabled={isDisabled}
+            className={`px-3 py-1.5 border-l border-slate-600 transition text-sm ${isDisabled ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'hover:bg-slate-600'}`}
             title="Next Image"
           >
             &rsaquo;
@@ -68,11 +61,12 @@ export const AnnotateTopToolbar: React.FC<TopToolbarProps> = ({
         </div>
 
         <div className="flex items-center gap-4 text-xs text-slate-300 ml-2">
-          <label className="flex items-center gap-1.5 cursor-pointer" title="Toggle visibility for all annotations on the current image">
+          <label className={`flex items-center gap-1.5 ${isDisabled ? 'cursor-not-allowed text-slate-500' : 'cursor-pointer'}`} title="Toggle visibility for all annotations on the current image">
             <input
               type="checkbox"
               checked={hideAnnotations}
               onChange={(e) => onHideAnnotationsChange(e.target.checked)}
+              disabled={isDisabled}
               className="rounded accent-blue-500"
             />
             Hide all annotations

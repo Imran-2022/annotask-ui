@@ -43,8 +43,8 @@ export default function RegisterPage() {
           <div className="inline-flex items-center justify-center rounded-full bg-slate-900/90 px-4 py-2 text-[11px] uppercase tracking-[0.4em] text-slate-400 mb-4">
             ANNOTASK
           </div>
-          <h2 className="text-3xl font-semibold text-white">Sign Up</h2>
-          <p className="text-slate-400 mt-2">Create your account to get started</p>
+          <h2 className="text-3xl font-semibold text-white">Create your account</h2>
+          <p className="text-slate-400 mt-2">Sign up to save tasks, upload images, and annotate with your team.</p>
         </div>
 
         {error && (
@@ -61,6 +61,7 @@ export default function RegisterPage() {
             <input
               id="username"
               type="text"
+              autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -91,12 +92,14 @@ export default function RegisterPage() {
             <input
               id="password"
               type="password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-5 py-3 rounded-[1.75rem] border border-slate-700 bg-slate-950/90 text-slate-100 placeholder:text-slate-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 outline-none transition"
               placeholder="••••••••"
             />
+            <p className="text-xs text-slate-500 mt-2">Password should be at least 8 characters.</p>
           </div>
 
           <div>
@@ -106,12 +109,14 @@ export default function RegisterPage() {
             <input
               id="password2"
               type="password"
+              autoComplete="new-password"
               value={password2}
               onChange={(e) => setPassword2(e.target.value)}
               required
               className="w-full px-5 py-3 rounded-[1.75rem] border border-slate-700 bg-slate-950/90 text-slate-100 placeholder:text-slate-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 outline-none transition"
               placeholder="••••••••"
             />
+            <p className="text-xs text-slate-500 mt-2">Confirm your password to avoid typos.</p>
           </div>
 
           <button

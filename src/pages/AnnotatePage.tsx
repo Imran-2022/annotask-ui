@@ -4,7 +4,6 @@ import { useMedicalAnnotation } from '@/hooks/useMedicalAnnotation';
 import { MedicalAnnotationCanvas } from '@/components/MedicalAnnotationCanvas';
 import { AnnotateTopToolbar } from '@/components/AnnotateTopToolbar';
 import { AnnotateBottomToolbar } from '@/components/AnnotateBottomToolbar';
-import { UploadPanel } from '@/components/MedicalUploadPanel';
 import { AnnotationsSidebar } from '@/components/AnnotationsSidebar';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 
@@ -80,7 +79,10 @@ export default function AnnotatePage(): React.ReactElement {
     }
   };
 
+  const hasImage = annotation.images.length > 0 && !!annotation.currentImage;
+
   const handleKeyDown = (e: KeyboardEvent) => {
+    if (!hasImage) return;
     if (e.key === 'ArrowRight') {
       annotation.navigateImage('next');
     } else if (e.key === 'ArrowLeft') {
@@ -93,7 +95,7 @@ export default function AnnotatePage(): React.ReactElement {
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [annotation]);
+  }, [annotation, handleKeyDown]);
 
   if (annotation.images.length === 0 && annotation.loading) {
     return (
@@ -102,19 +104,6 @@ export default function AnnotatePage(): React.ReactElement {
           <div className="animate-spin inline-block w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full" />
           <p className="mt-6 text-slate-200 text-lg font-medium">Loading images...</p>
           <p className="mt-2 text-slate-400">Please wait while we prepare your annotation workspace.</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (annotation.images.length === 0) {
-    return (
-      <div className="min-h-screen bg-slate-50 px-4 py-10">
-        <div className="max-w-4xl mx-auto">
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-            <h1 className="text-4xl font-bold text-slate-900 mb-6">Image Annotation</h1>
-            <UploadPanel onUpload={handleUpload} loading={annotation.loading} />
-          </div>
         </div>
       </div>
     );
@@ -150,20 +139,15 @@ export default function AnnotatePage(): React.ReactElement {
       <AnnotateTopToolbar
         currentImageIndex={annotation.currentImageIndex}
         totalImages={annotation.images.length}
-        label={annotation.label}
-        onLabelChange={annotation.setLabel}
         hideAnnotations={annotation.hideAnnotations}
         onHideAnnotationsChange={annotation.setHideAnnotations}
-        hidePreviousAnnotations={annotation.hidePreviousAnnotations}
-        onHidePreviousAnnotationsChange={annotation.setHidePreviousAnnotations}
-        applyWindow={annotation.applyWindow}
-        onApplyWindowChange={annotation.setApplyWindow}
         onPrevImage={() => annotation.navigateImage('prev')}
         onNextImage={() => annotation.navigateImage('next')}
         onBack={() => navigate('/tasks')}
         onUpload={handleUpload}
         onDeleteImage={handleDeleteCurrentImage}
-        hasImage={!!annotation.currentImage}
+        hasImage={hasImage}
+        isImageAvailable={hasImage}
       />
 
       <main className="flex flex-1 min-h-0 w-full overflow-hidden">
@@ -222,11 +206,12 @@ export default function AnnotatePage(): React.ReactElement {
               onResetView={annotation.resetView}
               onFullscreen={handleFullscreen}
               zoom={annotation.canvas.zoom}
+              disabled={!hasImage}
             />
           </footer>
         </section>
 
-        {showSidebar && (
+        {showSidebar && hasImage && (
           <aside className="w-80 border-l border-slate-700 bg-slate-800 flex flex-col shrink-0">
             <AnnotationsSidebar
               annotations={annotation.annotations}
