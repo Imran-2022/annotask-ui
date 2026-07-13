@@ -44,17 +44,23 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
       <div className="flex items-center gap-2">
         <button
           onClick={() => {
-            onToolChange('draw');
-            onStartDrawing();
+            if (isDrawing) {
+              onStopDrawing();
+            } else {
+              onToolChange('draw');
+              onStartDrawing();
+            }
           }}
-          className={`bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${
-            isDrawTool ? 'hover:bg-blue-500' : 'hover:bg-blue-500'
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${
+            isDrawing
+              ? 'bg-emerald-600 text-white hover:bg-emerald-500'
+              : 'bg-blue-600 text-white hover:bg-blue-500'
           }`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
           </svg>
-          Draw Polygon
+          {isDrawing ? 'Drawing' : 'Draw Polygon'}
         </button>
 
         <button
@@ -62,7 +68,7 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
           className="hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11.5V14m0-2. 5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0m2.5 0h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364-6.364l-2.121 2.121M8.757 15.243l-2.121 2.121M17.121 17.121l-2.121-2.121M8.757 8.757L6.636 10.879" />
           </svg>
           Pan
         </button>
@@ -85,18 +91,17 @@ export const AnnotateBottomToolbar: React.FC<BottomToolbarProps> = ({
       </div>
 
       <div className="flex items-center gap-1.5">
-        {hasCurrentPolygon && (
-          <button
-            onClick={onSaveAnnotation}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition"
-            title="Save Polygon"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            Save
-          </button>
-        )}
+        <button
+          onClick={onSaveAnnotation}
+          disabled={!hasCurrentPolygon}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${hasCurrentPolygon ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-60'}`}
+          title="Save Polygon"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          Save
+        </button>
         <button
           onClick={onDeleteSelected}
           disabled={!hasSelection}

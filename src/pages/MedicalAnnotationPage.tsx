@@ -19,6 +19,7 @@ export const MedicalAnnotationPage: React.FC = () => {
   const handleSaveAnnotation = async () => {
     const previousCount = annotation.annotations.length;
     await annotation.saveAnnotation();
+    annotation.setTool('select');
     if (annotation.annotations.length > previousCount) {
       setSuccessMessage(`✓ Annotation saved! (${annotation.annotations.length} total)`);
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -57,6 +58,7 @@ export const MedicalAnnotationPage: React.FC = () => {
 
   const handleStopDrawing = () => {
     annotation.resetDrawing();
+    annotation.setTool('select');
   };
 
   const handleFullscreen = () => {
@@ -161,6 +163,7 @@ export const MedicalAnnotationPage: React.FC = () => {
         <section className="flex-1 flex flex-col bg-slate-950 p-4 relative min-w-0">
           <div className="flex-1 flex items-center justify-center relative min-h-0 w-full overflow-hidden rounded-lg bg-slate-900 border border-slate-800">
             <MedicalAnnotationCanvas
+              key={annotation.currentImage?.id ?? 'no-image'}
               imageUrl={annotation.currentImage?.file_url || null}
               annotations={annotation.annotations}
               currentPoints={annotation.drawing.currentPoints}

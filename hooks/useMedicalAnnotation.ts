@@ -30,7 +30,7 @@ export const useMedicalAnnotation = () => {
     panY: 0,
   });
   
-  const [tool, setTool] = useState<'draw' | 'pan' | 'select'>('draw');
+  const [tool, setTool] = useState<'draw' | 'pan' | 'select'>('select');
   const [label, setLabel] = useState<'tumor' | 'organ' | 'vessel' | 'other'>('tumor');
   const [hideAnnotations, setHideAnnotations] = useState(false);
   const [hidePreviousAnnotations, setHidePreviousAnnotations] = useState(false);
@@ -39,23 +39,32 @@ export const useMedicalAnnotation = () => {
   
   const historyRef = useRef<Array<Array<{ x: number; y: number }>>>([]);
   const redoStackRef = useRef<Array<Array<{ x: number; y: number }>>>([]);
+  const activeImageIdRef = useRef<number | null>(null);
   
   const currentImage = images[currentImageIndex];
   
   const loadAnnotations = useCallback(async (imageId: number) => {
+    activeImageIdRef.current = imageId;
     try {
       setError(null);
       const data = await annotationService.getAnnotations(imageId);
+      if (activeImageIdRef.current !== imageId) return;
       setAnnotations(data);
       setSelectedAnnotationId(null);
       setDrawing({ isDrawing: false, currentPoints: [] });
     } catch (err) {
+      if (activeImageIdRef.current !== imageId) return;
       setError(err instanceof Error ? err.message : 'Failed to load annotations');
     }
   }, []);
 
   useEffect(() => {
     if (!currentImage) return;
+    setAnnotations([]);
+    setSelectedAnnotationId(null);
+    setDrawing({ isDrawing: false, currentPoints: [] });
+    historyRef.current = [];
+    redoStackRef.current = [];
     loadAnnotations(currentImage.id);
   }, [currentImage, loadAnnotations]);
 

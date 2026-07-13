@@ -61,7 +61,11 @@ class MedicalImageService {
   }
 
   async getImages(): Promise<MedicalImage[]> {
-    const response = await apiClient.get('/images/');
+    const response = await apiClient.get('/images/', {
+      params: {
+        ordering: 'uploaded_at,id',
+      },
+    });
     const data = response.data;
     const list = data.results || data;
     if (!Array.isArray(list)) return [];

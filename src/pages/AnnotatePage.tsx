@@ -21,6 +21,7 @@ export default function AnnotatePage(): React.ReactElement {
   const handleSaveAnnotation = async () => {
     const previousCount = annotation.annotations.length;
     await annotation.saveAnnotation();
+    annotation.setTool('select');
     if (annotation.annotations.length > previousCount) {
       setSuccessMessage(`✓ Annotation saved! (${annotation.annotations.length} total)`);
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -59,6 +60,7 @@ export default function AnnotatePage(): React.ReactElement {
 
   const handleStopDrawing = () => {
     annotation.resetDrawing();
+    annotation.setTool('select');
   };
 
   const navigate = useNavigate();
@@ -100,6 +102,19 @@ export default function AnnotatePage(): React.ReactElement {
           <div className="animate-spin inline-block w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full" />
           <p className="mt-6 text-slate-200 text-lg font-medium">Loading images...</p>
           <p className="mt-2 text-slate-400">Please wait while we prepare your annotation workspace.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (annotation.images.length === 0) {
+    return (
+      <div className="min-h-screen bg-slate-50 px-4 py-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+            <h1 className="text-4xl font-bold text-slate-900 mb-6">Image Annotation</h1>
+            <UploadPanel onUpload={handleUpload} loading={annotation.loading} />
+          </div>
         </div>
       </div>
     );
@@ -155,6 +170,7 @@ export default function AnnotatePage(): React.ReactElement {
         <section className="flex-1 flex flex-col bg-slate-950 p-4 relative min-w-0">
           <div className="flex-1 flex items-center justify-center relative min-h-0 w-full overflow-hidden rounded-lg bg-slate-900 border border-slate-800">
             <MedicalAnnotationCanvas
+              key={annotation.currentImage?.id ?? 'no-image'}
               imageUrl={annotation.currentImage?.file_url || null}
               annotations={annotation.annotations}
               currentPoints={annotation.drawing.currentPoints}

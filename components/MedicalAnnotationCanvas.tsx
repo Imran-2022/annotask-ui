@@ -127,6 +127,8 @@ export const MedicalAnnotationCanvas: React.FC<AnnotationCanvasProps> = ({
     const stage = stageRef.current;
     if (!stage) return;
 
+    if (!image) return;
+
     const pointerPos = stage.getPointerPosition();
     if (!pointerPos) return;
 
